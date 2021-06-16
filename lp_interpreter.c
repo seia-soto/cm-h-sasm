@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "lp_utils_debug.h"
 #include "lp_utils_sio.h"
@@ -31,14 +32,17 @@ int lp_calc_memory(int mode, int num) {
 
     return i;
 }
-int lp_interpret_line(int line_pos, char *line) {
-    lp_info(lp_concat_string("Interpreting... ", line));
+int lp_interpret_line(int line_pos, char *line, bool verbose) {
+    if (verbose == true) {
+        lp_info(lp_concat_string("Interpreting... ", line));
+    }
 
     char **tokens = lp_split_string(line, ' ');
     int command_id = lp_is_supported_instruction(*tokens);
 
     if (command_id < 0) {
         printf("LINE: %d -> ", line_pos);
+
         lp_error("Unknown instruction found at line!");
     }
 

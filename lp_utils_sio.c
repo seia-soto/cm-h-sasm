@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "lp_utils_debug.h"
 
@@ -71,14 +72,16 @@ char** lp_split_string(char *text, const char sep) {
 
     return result;
 }
-char* lp_read_file(const char *path) {
+char* lp_read_file(const char *path, bool verbose) {
     // 읽을 파일의 경로가 주어지지 않았을 때
     if (!strlen(path)) {
         lp_error("The path of file to execute not provided! Please keep context.");
     }
 
     // 파일 경로와 함께 로그 메세지 출력
-    lp_info(lp_concat_string("Loading file from ", path));
+    if (verbose == true) {
+        lp_info(lp_concat_string("Loading file from ", path));
+    }
 
     // 파일 포인터 정의
     FILE *file;
