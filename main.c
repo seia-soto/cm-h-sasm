@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "lp_utils_debug.h"
 #include "lp_utils_sio.h"
@@ -10,6 +11,10 @@
 
 int main(int argc, char *argv[]) {
     char *file_path;
+    bool verbose = false;
+
+    if (argc == 3 && (strcmp(argv[2], "-V") == 0 || strcmp(argv[2], "--verbose") == 0))
+        verbose = true;
 
     // 인자가 충분하지 않으면 (읽을 파일이 없으면) LP_DEFAULT_FILE로 대체
     if (argc < 2) {
@@ -18,22 +23,24 @@ int main(int argc, char *argv[]) {
         file_path = lp_safemloc_char(strlen(LP_DEFAULT_FILE));
         strcpy(file_path, LP_DEFAULT_FILE);
     } else {
+
         file_path = lp_safemloc_char(strlen(argv[1]));
         strcpy(file_path, argv[1]);
     }
 
-    char *file_buffer = lp_read_file(file_path);
+    char *file_buffer = lp_read_file(file_path, verbose);
     char **file_lines = lp_split_string(file_buffer, '\n');
 
     // 라인이 없을 때
     if (!file_lines) {
+        if (verbose != true) exit(0);
         lp_info("Nothing to do!");
 
         exit(0);
     }
 
     for (int i = 0; *(file_lines + i); i++) {
-        lp_interpret_line(i, *(file_lines + i));
+        lp_interpret_line(i, *(file_lines + i), verbose);
 
         free(*(file_lines + i));
     }
