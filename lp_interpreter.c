@@ -47,10 +47,14 @@ int lp_interpret_line(int line_pos, char *line) {
             // 커맨드 이후 첫 번재 인자는 key
             char *key = *(tokens + 1);
             // 0만큼 할당
-            char *value = lp_safemloc_char(0);
+            char *value = "";
 
             // 나머지 토큰을 모두 더해 설정할 값으로 만들어줍니다
             for (int i = 2; *(tokens + i); i++) {
+                if (i > 2) {
+                    value = lp_concat_string(value, " ");
+                }
+
                 value = lp_concat_string(value, *(tokens + i));
             }
 
