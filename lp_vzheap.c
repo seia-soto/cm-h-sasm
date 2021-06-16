@@ -19,7 +19,8 @@ char* lp_vzheap_load(int mode, char *vzheap_pre) {
     }
     // heap이 없으면 메모리 0개만큼 할당
     if (vzheap == NULL) {
-        vzheap = malloc(0);
+        // 임의의 값이 할당되지 않게 초기화
+        vzheap = calloc(sizeof(char), 0);
     }
 
     // 즉시 반환
@@ -30,7 +31,7 @@ void lp_vzheap_write(const char *key, const char *value) {
     // k-v 저장소를 ; 기준으로 나눔
     char **vzheap = lp_split_string(vzheap_orig, ';');
     // 앞으로 확장할 예정인 vzheap_pre 포인터에 0만큼 메모리 할당
-    char *vzheap_pre = malloc(0);
+    char *vzheap_pre = "";
 
     int is_key_found = 0;
 
